@@ -1,0 +1,53 @@
+name: Import current portfolio
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  import:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download the published portfolio
+        shell: bash
+        run: |
+          set -euo pipefail
+          base="https://zhanglexuan-portfolio.jacobhz-zhang.chatgpt.site"
+          mkdir -p dist/assets .openai
+
+          curl --fail --location --retry 3 --output dist/index.html "$base/"
+          curl --fail --location --retry 3 --output dist/styles.css "$base/styles.css"
+          curl --fail --location --retry 3 --output dist/script.js "$base/script.js"
+
+          for file in             commercial-page-2-hd.webp             commercial-pages-2-3.webp             commercial-photography-portfolio.pdf             interaction-video-166.webp             interaction-video-start.webp             photo-beauty.webp             photo-city.webp             photo-minimal.webp             photo-motion.webp             photo-resort.webp             product-video-start.webp             robot-film-poster.webp             robot-product-film-web.mp4             smokelens-film-poster.webp             smokelens-project-film-web.mp4             storyboard-cover.webp             storyboard-manuscript.pdf             storyboard-page-3.webp
+          do
+            curl --fail --location --retry 3 --output "dist/assets/$file" "$base/assets/$file"
+          done
+
+          printf '%s\n' '{"project_id":"appgprj_6aa279cf27348191889a07c255b4bbd6","static":{"directory":"dist"}}' > .openai/hosting.json
+
+          cat > README.md <<'EOF'
+          # 张乐萱个人作品集
+
+          中国美术学院｜影像、产品、交互设计与 AIGC
+
+          当前线上版本：https://zhanglexuan-portfolio.jacobhz-zhang.chatgpt.site
+          EOF
+
+          rm -f .github/workflows/import-portfolio.yml
+
+      - name: Commit imported files
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Sync current portfolio source"
+          git push
