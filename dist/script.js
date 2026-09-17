@@ -27,19 +27,3 @@ if ('IntersectionObserver' in window) {
   }, { rootMargin: '-30% 0px -58% 0px', threshold: 0 });
   sections.forEach((section) => sectionObserver.observe(section));
 }
-
-const timedVideos = document.querySelectorAll('video[data-start-time]');
-timedVideos.forEach((video) => {
-  const setInitialTime = () => {
-    const startTime = Number(video.dataset.startTime);
-    if (Number.isFinite(startTime)) {
-      video.currentTime = Math.min(startTime, Math.max(0, video.duration - 0.1));
-    }
-  };
-
-  if (video.readyState >= 1) {
-    setInitialTime();
-  } else {
-    video.addEventListener('loadedmetadata', setInitialTime, { once: true });
-  }
-});
