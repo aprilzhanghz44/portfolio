@@ -193,6 +193,13 @@ footer {
 footer > div { display: flex; flex-direction: column; gap: 8px; }
 footer strong { font-size: 24px; }
 footer span { color: #86868b; font-size: 14px; }
+.footer-actions { align-items: flex-end; }
+.footer-resume {
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(245, 245, 247, .55);
+  font-size: 15px;
+}
+.footer-resume span { margin-left: 6px; color: inherit; }
 
 .reveal { opacity: 1; transform: none; }
 
@@ -229,6 +236,7 @@ footer span { color: #86868b; font-size: 14px; }
   .project h2 { font-size: 30px; }
   .photo-spread img { aspect-ratio: auto; }
   .video-caption, .embed-fallback, .storyboard-info, footer { align-items: flex-start; flex-direction: column; }
+  .footer-actions { align-items: flex-start; }
   .embed-fallback a { text-align: left; }
 }
 
